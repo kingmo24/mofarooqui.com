@@ -1,79 +1,92 @@
-# mofarooqui.com
+# mofarooqui.com — v4
 
-Static site, one page, no build step. Deployed on Vercel.
+Seven pages, static HTML, no build step required to deploy. Hosted on Vercel.
 
 ```
-index.html          the whole page
-styles.css          design tokens at the top — change colours/type once, everywhere updates
-main.js             scroll reveals + contact form submit
-api/contact.js      Vercel serverless function that emails the form
-assets/             original artwork (SVG) + social card + headshot placeholder
-mo-farooqui.vcf     the "save my contact" e-business card
-vercel.json         caching + security headers
+index.html        home
+diligence.html    QoE, EBITDA, underwriting, consulting  → /diligence
+legal.html        paralegal practice                     → /legal
+marketing.html    Sound Marketing Canada                 → /marketing
+work.html         companies, positions, registrations    → /work
+about.html        story, education, licensing            → /about
+contact.html      form + direct lines                    → /contact
+404.html          not-found page
+
+styles.css        all design tokens live in :root at the top
+main.js           reveals, nav state, contact form
+build.py          optional generator (see below)
+api/contact.js    serverless function that emails the form
+assets/           artwork, portrait, icons, social card
 ```
+
+Clean URLs are on, so `diligence.html` is served at `/diligence`. Keep the links
+without the `.html` extension.
+
+## Editing
+
+For copy changes, **edit the `.html` files directly** — they are plain HTML and
+that is the simplest path.
+
+The header and footer are repeated in every page. If you change something shared
+(a nav link, the footer, the disclaimer), edit `build.py` and run:
+
+```bash
+python3 build.py
+```
+
+That regenerates all pages and the sitemap. If you have edited the HTML by hand
+since the last build, your changes will be overwritten — so pick one approach and
+stay with it. For most updates, editing the HTML is fine.
+
+## Design tokens
+
+Everything visual comes from the variables at the top of `styles.css`:
+
+| Token | Value | Used for |
+|---|---|---|
+| `--ink` | `#0B1110` | dark sections, footer |
+| `--bone` | `#EDEBE4` | light sections |
+| `--brass` | `#A97F45` | accents, prices, links |
+| `--display` | Cormorant Garamond | headings |
+| `--body` | Karla | body text |
+| `--mono` | IBM Plex Mono | labels, figures |
+
+Change a value there and the whole site follows.
 
 ## Deploy
 
 ```bash
 npm i -g vercel
-cd path/to/this/folder
-vercel            # first run: links the project, gives you a preview URL
-vercel --prod     # ships it live
+vercel --prod
 ```
 
-Or push the folder to GitHub and click **Add New → Project** at vercel.com. Vercel
-detects it as a static site with no framework — leave build settings empty.
+Or push to GitHub and import the repo at vercel.com. Framework preset: **Other**.
+Build command and output directory: leave empty.
 
-## Point mofarooqui.com at it
+Domain: Vercel → Settings → Domains → add `mofarooqui.com`. At your registrar,
+A record `@` → `76.76.21.21`, CNAME `www` → `cname.vercel-dns.com`.
 
-Vercel dashboard → your project → **Settings → Domains** → add `mofarooqui.com`
-and `www.mofarooqui.com`. Vercel prints the exact records; at your registrar set:
+## Contact form
 
-| Type  | Name | Value                  |
-|-------|------|------------------------|
-| A     | @    | `76.76.21.21`          |
-| CNAME | www  | `cname.vercel-dns.com` |
+Set two environment variables in Vercel, then redeploy:
 
-TLS is issued automatically once DNS propagates (usually minutes, up to 48h).
+- `RESEND_API_KEY` — from resend.com
+- `CONTACT_TO` — `marfarooqui@gmail.com`
 
-## Turn on the contact form
-
-The form posts to `/api/contact`. Without keys it will fail and show the
-"email me directly" fallback, so set this up before launch:
-
-1. Sign up at **resend.com**, create an API key.
-2. Vercel → Settings → **Environment Variables**:
-   - `RESEND_API_KEY` = your key
-   - `CONTACT_TO` = `marfarooqui@gmail.com`
-3. Redeploy.
-
-To send from `mo@mofarooqui.com` instead of the shared test address, verify the
-domain in Resend (it gives you DKIM records), then change the `from:` line in
-`api/contact.js`.
-
-Simpler alternative: make a form at **formspree.io**, and in `index.html` change
-the form to `<form action="https://formspree.io/f/YOURID" method="POST">` and
-delete the fetch block in `main.js`. No environment variables needed.
+Without them the form shows the "email me directly" fallback. Never commit the key.
 
 ## The headshot
 
-`assets/portrait.png` is your photo, upscaled 2x from the 92px original and cut to a
-circle with a transparent background. It is displayed at 88px, which is the largest
-size that still looks sharp. **Send a full-resolution version and this can get bigger.**
-To swap it: replace `assets/portrait.png` (square, transparent circle) and
-`assets/portrait-card.png` (square, on `#DEE7DB`, used for the social preview).
+`assets/portrait.png` is your photo upscaled 2× from a 92px original, cut to a
+transparent circle. It is displayed at 84px, which is as large as it can go while
+staying sharp. Send a full-resolution photo and it can be used much bigger —
+including a proper portrait on the About page.
 
-`assets/og.png` is the social card that renders when the link is shared. Regenerate it
-if the photo changes.
-
-## Editing content
-
-Everything is plain HTML in `index.html`, in the order it appears on the page.
-Prices live in the `<span class="price">` elements. Timeline entries are `<li>`
-items. Colours and fonts are the `:root` variables at the top of `styles.css`.
+Regenerate `assets/og.png` (the social preview) if the photo changes.
 
 ## Local preview
 
 ```bash
-npx serve .
+npx serve .        # static only
+vercel dev         # includes the contact form function
 ```
