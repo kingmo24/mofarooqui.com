@@ -1,9 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" role="img" aria-label="A funnel narrowing from reach to closed clients">
-<defs><linearGradient id="gm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5E7355"/><stop offset="1" stop-color="#C6603D"/></linearGradient></defs>
-<rect width="600" height="380" fill="#FBF9F4"/>
-<path d="M90 60h420l-70 90H160z" fill="#5E7355" opacity=".85"/>
-<path d="M160 170h280l-58 84H218z" fill="#5E7355" opacity=".6"/>
-<path d="M218 274h164l-48 66H266z" fill="#C6603D"/>
+<rect width="600" height="380" fill="#EEF2F7"/>
+<path d="M90 60h420l-70 90H160z" fill="#2B5FE3" opacity=".9"/>
+<path d="M160 170h280l-58 84H218z" fill="#0E9AA6" opacity=".85"/>
+<path d="M218 274h164l-48 66H266z" fill="#F0653E"/>
 <g font-family="ui-monospace,monospace" font-size="13" fill="#fff">
 <text x="300" y="112" text-anchor="middle">REACH</text><text x="300" y="220" text-anchor="middle">QUALIFIED</text></g>
 <text x="300" y="316" font-family="ui-monospace,monospace" font-size="13" fill="#fff" text-anchor="middle" font-weight="600">CLIENTS</text>

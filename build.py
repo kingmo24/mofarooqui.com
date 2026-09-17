@@ -124,7 +124,7 @@ def shell(*, path, title, description, body, active, schema="", keywords="", og_
 <meta name="keywords" content="{kw}">
 <meta name="author" content="Mohammed A. R. Farooqui">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-<meta name="theme-color" content="#FBF9F4">
+<meta name="theme-color" content="#EEF2F7">
 <meta name="format-detection" content="telephone=no">
 <link rel="canonical" href="{canonical}">
 
@@ -738,8 +738,8 @@ def main():
         "start_url": "/",
         "scope": "/",
         "display": "standalone",
-        "background_color": "#FBF9F4",
-        "theme_color": "#FBF9F4",
+        "background_color": "#EEF2F7",
+        "theme_color": "#0E1A2B",
         "icons": [
             {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
             {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
