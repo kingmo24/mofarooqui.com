@@ -47,7 +47,7 @@ def nav(active):
     )
     return f"""<nav class="nav">
   <div class="wrap">
-    <a class="logo" href="/"><img src="/assets/mark.svg" alt="" width="34" height="34"><span>M. A. R. Farooqui</span></a>
+    <a class="logo" href="/"><img src="/mark.svg" alt="" width="34" height="34"><span>M. A. R. Farooqui</span></a>
     <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu">
       <span class="bars" aria-hidden="true"><i></i><i></i></span>
       <span class="sr">Menu</span>
@@ -102,7 +102,7 @@ def shell(*, path, title, description, body, active, schema="", keywords="", og_
     # per-page graph: WebPage + optional service/legal schema, all tied to one Person + WebSite
     graph = [
         '{"@type":"WebSite","@id":"%s/#website","url":"%s/","name":"Mohammed A. R. Farooqui","publisher":{"@id":"%s/#person"},"inLanguage":"en-CA"}' % (SITE, SITE, SITE),
-        '{"@type":"Person","@id":"%s/#person","name":"Mohammed A. R. Farooqui","url":"%s/","image":{"@type":"ImageObject","url":"%s/assets/portrait-card.png"},"jobTitle":"Licensed Paralegal & Financial Analyst","email":"marfarooqui@gmail.com","telephone":"+1-647-200-3526","address":{"@type":"PostalAddress","addressLocality":"Pickering","addressRegion":"ON","postalCode":"L1V 1C8","addressCountry":"CA"},"sameAs":["https://www.linkedin.com/in/kingmo24"],"worksFor":{"@type":"Organization","name":"Sound Marketing Canada Inc."},"knowsAbout":["Quality of Earnings","EBITDA analysis","Mortgage underwriting","Credit underwriting","Paralegal services","Digital marketing"],"alumniOf":["University of Ottawa","triOS College","UBC Sauder School of Business"]}' % (SITE, SITE, SITE),
+        '{"@type":"Person","@id":"%s/#person","name":"Mohammed A. R. Farooqui","url":"%s/","image":{"@type":"ImageObject","url":"%s/portrait-card.png"},"jobTitle":"Licensed Paralegal & Financial Analyst","email":"marfarooqui@gmail.com","telephone":"+1-647-200-3526","address":{"@type":"PostalAddress","addressLocality":"Pickering","addressRegion":"ON","postalCode":"L1V 1C8","addressCountry":"CA"},"sameAs":["https://www.linkedin.com/in/kingmo24"],"worksFor":{"@type":"Organization","name":"Sound Marketing Canada Inc."},"knowsAbout":["Quality of Earnings","EBITDA analysis","Mortgage underwriting","Credit underwriting","Paralegal services","Digital marketing"],"alumniOf":["University of Ottawa","triOS College","UBC Sauder School of Business"]}' % (SITE, SITE, SITE),
         '{"@type":"WebPage","@id":"%s#webpage","url":"%s","name":%s,"description":%s,"isPartOf":{"@id":"%s/#website"},"about":{"@id":"%s/#person"},"inLanguage":"en-CA"}' % (canonical, canonical, _j(title), _j(description), SITE, SITE),
     ]
     # breadcrumbs (skip on home)
@@ -124,7 +124,7 @@ def shell(*, path, title, description, body, active, schema="", keywords="", og_
 <meta name="keywords" content="{kw}">
 <meta name="author" content="Mohammed A. R. Farooqui">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-<meta name="theme-color" content="#0B1110">
+<meta name="theme-color" content="#FBF9F4">
 <meta name="format-detection" content="telephone=no">
 <link rel="canonical" href="{canonical}">
 
@@ -135,8 +135,8 @@ def shell(*, path, title, description, body, active, schema="", keywords="", og_
 <meta property="og:url" content="{canonical}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{description}">
-<meta property="og:image" content="{SITE}/assets/og.png">
-<meta property="og:image:secure_url" content="{SITE}/assets/og.png">
+<meta property="og:image" content="{SITE}/og.png">
+<meta property="og:image:secure_url" content="{SITE}/og.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -146,16 +146,16 @@ def shell(*, path, title, description, body, active, schema="", keywords="", og_
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{title}">
 <meta name="twitter:description" content="{description}">
-<meta name="twitter:image" content="{SITE}/assets/og.png">
+<meta name="twitter:image" content="{SITE}/og.png">
 <meta name="twitter:image:alt" content="{og_image_alt}">
 
 <!-- Icons -->
 <link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#0B1110">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0B1110">
 <link rel="manifest" href="/site.webmanifest">
 
 <!-- Fonts -->
@@ -168,6 +168,7 @@ def shell(*, path, title, description, body, active, schema="", keywords="", og_
 {schema_block}
 </head>
 <body>
+<div class="progress" id="progress" aria-hidden="true"></div>
 <a class="skip" href="#main">Skip to content</a>
 {nav(active)}
 <main id="main">
@@ -185,20 +186,20 @@ def shell(*, path, title, description, body, active, schema="", keywords="", og_
 # --------------------------------------------------------------------------
 
 def cta_band(heading, sub, primary=("Book a call", "/contact"), secondary=None):
-    second = f'<a class="btn btn-line" href="{secondary[1]}">{secondary[0]}</a>' if secondary else ""
-    return f"""<section class="dark grain pad">
+    second = f'<a class="btn btn-line" href="{secondary[1]}"><span>{secondary[0]}</span></a>' if secondary else ""
+    return f"""<section class="ink-panel pad">
   <div class="wrap band">
     <h2 class="h-lg rise">{heading}</h2>
     <p class="lead rise">{sub}</p>
     <div class="actions rise">
-      <a class="btn btn-brass" href="{primary[1]}">{primary[0]}</a>
+      <a class="btn btn-fill" href="{primary[1]}"><span>{primary[0]}</span></a>
       {second}
     </div>
   </div>
 </section>"""
 
 
-STEPS = """<ol class="steps">
+STEPS = """<ol class="steps stagger">
   <li class="rise"><span class="n">Step 01</span><h3>Scoping call</h3><p>What the deal is, what is at stake, and what records exist. If I am not the right person for it, you will hear that on this call.</p><span class="dur">30 minutes &middot; no charge</span></li>
   <li class="rise"><span class="n">Step 02</span><h3>Document request</h3><p>A specific list, not a fishing expedition: statements, general ledger, bank reconciliations, tax filings, payroll, material contracts.</p><span class="dur">Fixed quote &middot; retainer</span></li>
   <li class="rise"><span class="n">Step 03</span><h3>Analysis</h3><p>Normalize the statements, test every add-back against evidence, prove out cash, and work through working capital, margin, and concentration.</p><span class="dur">Two to four weeks</span></li>
@@ -219,14 +220,15 @@ PAGES["index"] = dict(
     description="Quality of Earnings and EBITDA analysis, mortgage and credit underwriting, licensed paralegal representation, and growth marketing. Pickering and Toronto, Ontario.",
     active="/",
     schema="",
-    body=f"""<section class="dark grain hero">
-  <div class="wrap inner">
+    body=f"""<section class="ink-panel hero">
+  <span class="orb orb-1"></span><span class="orb orb-2"></span>
+    <div class="wrap inner">
     <span class="eyebrow rise" style="--i:0">Pickering &middot; Toronto &middot; Ontario</span>
-    <h1 class="h-xl rise" style="--i:1">Read the numbers<br>as closely as the <span class="italic brass">contract</span>.</h1>
+    <h1 class="h-xl"><span class="reveal-line"><span>Read the numbers</span></span><span class="reveal-line"><span>as closely as the</span></span><span class="reveal-line"><span class="italic amber">contract.</span></span></h1>
     <p class="lead rise" style="--i:2">I am a licensed Ontario paralegal and financial analyst. I test the earnings behind a deal, underwrite the credit behind a loan, and represent clients when the file turns into a dispute.</p>
     <div class="actions rise" style="--i:3">
-      <a class="btn btn-brass" href="/contact">Book a scoping call</a>
-      <a class="btn btn-line" href="/diligence">See how diligence runs</a>
+      <a class="btn btn-fill" href="/contact"><span>Book a scoping call</span></a>
+      <a class="btn btn-line" href="/diligence"><span>See how diligence runs</span></a>
     </div>
     <dl class="hero-meta rise" style="--i:4">
       <div><dt>Practice</dt><dd>Diligence &amp; underwriting</dd></div>
@@ -240,24 +242,24 @@ PAGES["index"] = dict(
 <section class="pad">
   <div class="wrap">
     <div class="rule-head"><h2 class="h-md">Three practices, one discipline</h2><span class="eyebrow eyebrow-mute">Where to start</span></div>
-    <div class="cards">
-      <a class="card rise" href="/diligence">
-        <img src="/assets/art-diligence.svg" alt="Reported earnings adjusted down to a normalized figure" width="600" height="380" loading="lazy">
-        <div class="card-body"><span class="eyebrow">For buyers &amp; lenders</span><h3>Diligence &amp; underwriting</h3><p>Quality of Earnings, EBITDA normalization, and mortgage or credit underwriting. The work that decides whether a price is defensible.</p><span class="more">Explore &rarr;</span></div>
+    <div class="cards stagger">
+      <a class="card" href="/diligence">
+        <div class="imgwrap"><img src="/art-diligence.svg" alt="Reported earnings adjusted down to a normalized figure" width="600" height="380" loading="lazy"></div>
+        <div class="card-body"><span class="eyebrow">For buyers &amp; lenders</span><h3>Diligence &amp; underwriting</h3><p>Quality of Earnings, EBITDA normalization, and mortgage or credit underwriting. The work that decides whether a price is defensible.</p><span class="more">Explore <span>&rarr;</span></span></div>
       </a>
-      <a class="card rise" href="/legal">
-        <img src="/assets/art-legal.svg" alt="A filed record with an official seal" width="600" height="380" loading="lazy">
-        <div class="card-body"><span class="eyebrow">For claimants &amp; respondents</span><h3>Paralegal services</h3><p>Representation within the scope permitted to Ontario paralegals, from the first demand letter through to hearing.</p><span class="more">Explore &rarr;</span></div>
+      <a class="card" href="/legal">
+        <div class="imgwrap"><img src="/art-legal.svg" alt="A filed record with an official seal" width="600" height="380" loading="lazy"></div>
+        <div class="card-body"><span class="eyebrow">For claimants &amp; respondents</span><h3>Paralegal services</h3><p>Representation within the scope permitted to Ontario paralegals, from the first demand letter through to hearing.</p><span class="more">Explore <span>&rarr;</span></span></div>
       </a>
-      <a class="card rise" href="/marketing">
-        <img src="/assets/art-marketing.svg" alt="A funnel narrowing from reach to closed clients" width="600" height="380" loading="lazy">
-        <div class="card-body"><span class="eyebrow">For operators</span><h3>Marketing &amp; growth</h3><p>Campaigns, lead generation, and analytics through Sound Marketing Canada, built on what the numbers say rather than what looks busy.</p><span class="more">Explore &rarr;</span></div>
+      <a class="card" href="/marketing">
+        <div class="imgwrap"><img src="/art-marketing.svg" alt="A funnel narrowing from reach to closed clients" width="600" height="380" loading="lazy"></div>
+        <div class="card-body"><span class="eyebrow">For operators</span><h3>Marketing &amp; growth</h3><p>Campaigns, lead generation, and analytics through Sound Marketing Canada, built on what the numbers say rather than what looks busy.</p><span class="more">Explore <span>&rarr;</span></span></div>
       </a>
     </div>
   </div>
 </section>
 
-<section class="dark grain pad">
+<section class="ink-panel pad">
   <div class="wrap">
     <div class="split split-wide">
       <div class="rise">
@@ -268,7 +270,7 @@ PAGES["index"] = dict(
         <p class="lead">I started by building a marketing and technology firm, which pulled me into the financial side of every deal it touched. That led to underwriting, then to Quality of Earnings work, then to a paralegal licence when the same clients kept running into disputes.</p>
         <p class="prose prose-dark">Three regulated worlds &mdash; finance, law, and technology &mdash; and one job in all of them: work out what is actually true before someone signs, and say it plainly.</p>
         <div class="portrait-block">
-          <img src="/assets/portrait.png" alt="Mohammed A. R. Farooqui" width="184" height="184">
+          <img src="/portrait.png" alt="Mohammed A. R. Farooqui" width="184" height="184">
           <span><span class="sig">Mohammed A. R. Farooqui</span><span class="cap">Licensed paralegal &amp; financial analyst</span></span>
         </div>
       </div>
@@ -283,7 +285,7 @@ PAGES["index"] = dict(
   </div>
 </section>
 
-<section class="dark grain pad-sm">
+<section class="ink-panel pad-sm">
   <div class="wrap">
     <div class="pull rise">
       <blockquote>His analysis caught what we would have missed, and gave us the terms to negotiate with.</blockquote>
@@ -302,12 +304,13 @@ PAGES["diligence"] = dict(
     description="Quality of Earnings reports, EBITDA normalization, and mortgage and credit underwriting for buyers, lenders, and owners in Ontario and remote.",
     active="/diligence",
     schema="""{"@type":"Service","serviceType":"Quality of Earnings and financial due diligence","provider":{"@type":"Person","name":"Mohammed A. R. Farooqui"},"areaServed":"CA","url":"https://mofarooqui.com/diligence"},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How long does a Quality of Earnings engagement take?","acceptedAnswer":{"@type":"Answer","text":"Two to four weeks from the day the document request is filled. The clock is usually set by how fast the target produces records, not by the analysis itself."}},{"@type":"Question","name":"Can you work from incomplete books?","acceptedAnswer":{"@type":"Answer","text":"Often yes. Reconstructed statements are common in owner-operated businesses. It takes longer and costs more, and you will be told at the scoping call whether the records can support a defensible number."}},{"@type":"Question","name":"Do you work sell-side?","acceptedAnswer":{"@type":"Answer","text":"Yes. A sell-side Quality of Earnings run before going to market finds the adjustments a buyer would have used against you, which is generally cheaper than finding them during the buyer's diligence."}},{"@type":"Question","name":"Do you work outside Ontario?","acceptedAnswer":{"@type":"Answer","text":"Financial analysis, underwriting, and consulting are handled remotely anywhere in Canada and the United States. Paralegal representation is limited to Ontario."}}]}""",
-    body=f"""<section class="dark grain hero">
-  <div class="wrap inner">
+    body=f"""<section class="ink-panel hero">
+  <span class="orb orb-1"></span><span class="orb orb-2"></span>
+    <div class="wrap inner">
     <span class="eyebrow rise" style="--i:0">Practice 01</span>
-    <h1 class="h-lg rise" style="--i:1">Quality of Earnings<br>&amp; <span class="italic brass">underwriting</span></h1>
+    <h1 class="h-lg rise" style="--i:1">Quality of Earnings<br>&amp; <span class="italic amber">underwriting</span></h1>
     <p class="lead rise" style="--i:2">A stated EBITDA figure is an argument, not a fact. My job is to test it &mdash; and to tell you what the business actually earns before the price is fixed.</p>
-    <div class="actions rise" style="--i:3"><a class="btn btn-brass" href="/contact">Book a scoping call</a><a class="btn btn-line" href="#fees">See fees</a></div>
+    <div class="actions rise" style="--i:3"><a class="btn btn-fill" href="/contact"><span>Book a scoping call</span></a><a class="btn btn-line" href="#fees"><span>See fees</span></a></div>
   </div>
 </section>
 
@@ -326,10 +329,10 @@ PAGES["diligence"] = dict(
   </div>
 </section>
 
-<section class="dark grain pad">
+<section class="ink-panel pad">
   <div class="wrap">
     <div class="rule-head"><h2 class="h-md">What you receive</h2><span class="eyebrow">Deliverables</span></div>
-    <ul class="checks">
+    <ul class="checks stagger">
       <li>Normalized EBITDA with every adjustment itemized and sourced</li>
       <li>Add-back schedule showing what survived testing and what did not</li>
       <li>Working capital analysis and a peg recommendation</li>
@@ -350,10 +353,10 @@ PAGES["diligence"] = dict(
   </div>
 </section>
 
-<section class="dark grain pad" id="fees">
+<section class="ink-panel pad" id="fees">
   <div class="wrap">
     <div class="rule-head"><h2 class="h-md">Fees</h2><span class="eyebrow">All amounts CAD</span></div>
-    <div class="fees">
+    <div class="fees stagger">
       <div class="fee rise"><div><h3>Quality of Earnings</h3><p>Full diligence engagement including the report, the adjustment schedules, and the debrief call. Priced on deal size, entities and periods in scope, and the state of the records.</p></div><span class="amt">$73,589<small>Engagement, from</small></span></div>
       <div class="fee rise"><div><h3>Underwriting review</h3><p>Credit and mortgage underwriting, risk assessment, and scenario modelling on a single facility or a portfolio.</p></div><span class="amt">On request<small>Scoped per file</small></span></div>
       <div class="fee rise"><div><h3>Consulting</h3><p>Strategy, capital allocation, operations, and go-to-market advisory where you need a second set of eyes on a decision rather than a full report.</p></div><span class="amt">$7,359<small>Engagement, from</small></span></div>
@@ -384,19 +387,20 @@ PAGES["legal"] = dict(
     description="Licensed Ontario paralegal. Small Claims Court, provincial offences, Landlord and Tenant Board, and administrative tribunals. Pickering and the Greater Toronto Area.",
     active="/legal",
     schema="""{"@type":"LegalService","name":"Mohammed A. R. Farooqui, Paralegal","areaServed":{"@type":"State","name":"Ontario"},"url":"https://mofarooqui.com/legal","telephone":"+1-647-200-3526"},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does paralegal representation cost?","acceptedAnswer":{"@type":"Answer","text":"Quoted per matter after intake, either as a flat fee for defined work or hourly where the scope cannot be fixed in advance. Terms are provided in writing before work starts."}},{"@type":"Question","name":"Is a paralegal different from a lawyer?","acceptedAnswer":{"@type":"Answer","text":"Yes. Paralegals are licensed and regulated by the Law Society of Ontario and can represent clients in Small Claims Court, provincial offences, and certain tribunals. For matters inside paralegal scope the cost is usually materially lower."}},{"@type":"Question","name":"Can you act for me if you did the financial analysis?","acceptedAnswer":{"@type":"Answer","text":"Sometimes, assessed file by file. The roles carry different duties and a conflict can arise. It is raised at intake rather than after a retainer is signed."}}]}""",
-    body=f"""<section class="dark grain hero">
-  <div class="wrap inner">
+    body=f"""<section class="ink-panel hero">
+  <span class="orb orb-1"></span><span class="orb orb-2"></span>
+    <div class="wrap inner">
     <span class="eyebrow rise" style="--i:0">Practice 02</span>
-    <h1 class="h-lg rise" style="--i:1">Paralegal representation,<br><span class="italic brass">Ontario</span></h1>
+    <h1 class="h-lg rise" style="--i:1">Paralegal representation,<br><span class="italic amber">Ontario</span></h1>
     <p class="lead rise" style="--i:2">Most disputes are lost on preparation rather than argument. I take the file seriously from the first letter, and I tell you early when the case is not worth what it will cost to run.</p>
-    <div class="actions rise" style="--i:3"><a class="btn btn-brass" href="/contact">Describe your matter</a><a class="btn btn-line" href="#scope">What I can act on</a></div>
+    <div class="actions rise" style="--i:3"><a class="btn btn-fill" href="/contact"><span>Describe your matter</span></a><a class="btn btn-line" href="#scope"><span>What I can act on</span></a></div>
   </div>
 </section>
 
 <section class="pad" id="scope">
   <div class="wrap">
     <div class="rule-head"><h2 class="h-md">What I can act on</h2><span class="eyebrow eyebrow-mute">Scope of practice</span></div>
-    <div class="ledger">
+    <div class="ledger stagger">
       <div class="ledger-row rise"><span class="k">Claims</span><span class="v">Small Claims Court</span><span class="n">Debt recovery, contract disputes, unpaid invoices, property damage, and defence of the same.</span></div>
       <div class="ledger-row rise"><span class="k">Offences</span><span class="v">Provincial offences</span><span class="n">Matters under the Provincial Offences Act, including traffic and regulatory charges.</span></div>
       <div class="ledger-row rise"><span class="k">Housing</span><span class="v">Landlord and Tenant Board</span><span class="n">Applications and hearings for landlords and tenants.</span></div>
@@ -407,7 +411,7 @@ PAGES["legal"] = dict(
   </div>
 </section>
 
-<section class="dark grain pad">
+<section class="ink-panel pad">
   <div class="wrap">
     <div class="split">
       <div class="rise"><span class="eyebrow">The advantage</span><h2 class="h-lg mt-1">A file that is also a financial file.</h2></div>
@@ -422,7 +426,7 @@ PAGES["legal"] = dict(
 <section class="pad">
   <div class="wrap">
     <div class="rule-head"><h2 class="h-md">How a matter runs</h2><span class="eyebrow eyebrow-mute">Four steps</span></div>
-    <ol class="steps">
+    <ol class="steps stagger">
       <li class="rise"><span class="n">Step 01</span><h3>Intake</h3><p>What happened, what you want, and what documents exist. Conflicts are checked before anything else.</p><span class="dur">30 minutes &middot; no charge</span></li>
       <li class="rise"><span class="n">Step 02</span><h3>Assessment</h3><p>An honest read on merits, likely cost, and whether the amount at stake justifies the fight.</p><span class="dur">Written where useful</span></li>
       <li class="rise"><span class="n">Step 03</span><h3>Retainer and filing</h3><p>Engagement terms in writing, then demand, claim, or defence, with settlement pursued wherever it beats a hearing.</p><span class="dur">Fees agreed up front</span></li>
@@ -431,7 +435,7 @@ PAGES["legal"] = dict(
   </div>
 </section>
 
-<section class="dark grain pad">
+<section class="ink-panel pad">
   <div class="wrap narrow">
     <div class="rule-head"><h2 class="h-md">Questions</h2><span class="eyebrow">Before you call</span></div>
     <div class="faq">
@@ -451,19 +455,20 @@ PAGES["marketing"] = dict(
     title="Marketing &amp; Growth — Sound Marketing Canada | Mohammed A. R. Farooqui",
     description="Campaigns, lead generation, analytics, and online profile management for small businesses, real estate, and government procurement. Sound Marketing Canada Inc.",
     active="/marketing",
-    body=f"""<section class="dark grain hero">
-  <div class="wrap inner">
+    body=f"""<section class="ink-panel hero">
+  <span class="orb orb-1"></span><span class="orb orb-2"></span>
+    <div class="wrap inner">
     <span class="eyebrow rise" style="--i:0">Practice 03</span>
-    <h1 class="h-lg rise" style="--i:1">Marketing judged<br>by <span class="italic brass">qualified leads</span></h1>
+    <h1 class="h-lg rise" style="--i:1">Marketing judged<br>by <span class="italic amber">qualified leads</span></h1>
     <p class="lead rise" style="--i:2">Sound Marketing Canada Inc. builds campaigns, funnels, and analytics for small businesses, real estate, and firms bidding on government work. The reporting is built to be read by someone who understands a P&amp;L.</p>
-    <div class="actions rise" style="--i:3"><a class="btn btn-brass" href="/contact">Request a plan</a><a class="btn btn-line" href="#fees">See fees</a></div>
+    <div class="actions rise" style="--i:3"><a class="btn btn-fill" href="/contact"><span>Request a plan</span></a><a class="btn btn-line" href="#fees"><span>See fees</span></a></div>
   </div>
 </section>
 
 <section class="pad">
   <div class="wrap">
     <div class="rule-head"><h2 class="h-md">What we run</h2><span class="eyebrow eyebrow-mute">Services</span></div>
-    <div class="ledger">
+    <div class="ledger stagger">
       <div class="ledger-row rise"><span class="k">Acquisition</span><span class="v">Lead generation</span><span class="n">Multi-channel campaigns with tracking that ties spend to closed business rather than to impressions.</span></div>
       <div class="ledger-row rise"><span class="k">Search</span><span class="v">SEO &amp; content</span><span class="n">Technical fixes, local search, and content built around what buyers actually search for.</span></div>
       <div class="ledger-row rise"><span class="k">Measurement</span><span class="v">Analytics &amp; dashboards</span><span class="n">Attribution set up properly once, so the monthly report answers whether it worked.</span></div>
@@ -473,7 +478,7 @@ PAGES["marketing"] = dict(
   </div>
 </section>
 
-<section class="dark grain pad">
+<section class="ink-panel pad">
   <div class="wrap">
     <div class="split">
       <div class="rise">
@@ -481,7 +486,7 @@ PAGES["marketing"] = dict(
         <h2 class="h-lg mt-1">Sound AI</h2>
         <p class="lead mt-1">A predictive marketing tool that forecasts revenue and surfaces trends, built on Google Cloud with iOS and Android front ends and chatbot features.</p>
       </div>
-      <div class="rise"><img src="/assets/art-marketing.svg" alt="A funnel narrowing from reach to closed clients" width="600" height="380" loading="lazy" style="border:1px solid var(--rule-d)"></div>
+      <div class="rise"><img src="/art-marketing.svg" alt="A funnel narrowing from reach to closed clients" width="600" height="380" loading="lazy" style="border:1px solid var(--rule-d)"></div>
     </div>
   </div>
 </section>
@@ -489,7 +494,7 @@ PAGES["marketing"] = dict(
 <section class="pad" id="fees">
   <div class="wrap">
     <div class="rule-head"><h2 class="h-md">Fees</h2><span class="eyebrow eyebrow-mute">All amounts CAD</span></div>
-    <div class="fees">
+    <div class="fees stagger">
       <div class="fee rise"><div><h3>Digital marketing</h3><p>Campaign build and management, lead generation, funnel work, and analytics setup with monthly reporting.</p></div><span class="amt">$221<small>Per month, from</small></span></div>
       <div class="fee rise"><div><h3>Online profile management</h3><p>Audit, optimize, and protect your presence across search, directories, and review platforms.</p></div><span class="amt">$588<small>Per engagement</small></span></div>
       <div class="fee rise"><div><h3>Procurement readiness</h3><p>Registrations, classification coding, and bid documentation for public sector opportunities.</p></div><span class="amt">On request<small>Scoped per client</small></span></div>
@@ -506,10 +511,11 @@ PAGES["work"] = dict(
     title="Work &amp; Record — Mohammed A. R. Farooqui",
     description="Selected positions, companies, projects, and registrations. Sound Marketing Canada, LendX Financial Technologies, NEO Legal Services, CIBC, and government procurement work.",
     active="/work",
-    body=f"""<section class="dark grain hero">
-  <div class="wrap inner">
+    body=f"""<section class="ink-panel hero">
+  <span class="orb orb-1"></span><span class="orb orb-2"></span>
+    <div class="wrap inner">
     <span class="eyebrow rise" style="--i:0">The record</span>
-    <h1 class="h-lg rise" style="--i:1">What I have built<br>and <span class="italic brass">where I have worked</span></h1>
+    <h1 class="h-lg rise" style="--i:1">What I have built<br>and <span class="italic amber">where I have worked</span></h1>
     <p class="lead rise" style="--i:2">A selected record rather than a complete one. The full history is on LinkedIn.</p>
   </div>
 </section>
@@ -517,18 +523,18 @@ PAGES["work"] = dict(
 <section class="pad">
   <div class="wrap">
     <div class="rule-head"><h2 class="h-md">Companies &amp; projects</h2><span class="eyebrow eyebrow-mute">Founded or co-founded</span></div>
-    <div class="cards">
-      <div class="card rise"><img src="/assets/art-marketing.svg" alt="" width="600" height="380" loading="lazy"><div class="card-body"><span class="eyebrow">2017 &mdash;</span><h3>Sound Marketing Canada</h3><p>Marketing and technology firm serving small business, real estate, and government procurement. Platform partnerships across Shopify, Google, Meta, BBB, and Ariba SAP.</p></div></div>
-      <div class="card rise"><img src="/assets/art-diligence.svg" alt="" width="600" height="380" loading="lazy"><div class="card-body"><span class="eyebrow">2026 &mdash;</span><h3>LendX Financial Technologies</h3><p>Co-founded to take the underwriting and diligence work that runs on spreadsheets today and turn it into a product.</p></div></div>
-      <div class="card rise"><img src="/assets/art-legal.svg" alt="" width="600" height="380" loading="lazy"><div class="card-body"><span class="eyebrow">2023 &mdash;</span><h3>NEO Legal Services</h3><p>Professional corporation through which the Ontario paralegal practice runs.</p></div></div>
+    <div class="cards stagger">
+      <div class="card"><div class="imgwrap"><img src="/art-marketing.svg" alt="" width="600" height="380" loading="lazy"></div><div class="card-body"><span class="eyebrow">2017 &mdash;</span><h3>Sound Marketing Canada</h3><p>Marketing and technology firm serving small business, real estate, and government procurement. Platform partnerships across Shopify, Google, Meta, BBB, and Ariba SAP.</p></div></div>
+      <div class="card"><div class="imgwrap"><img src="/art-diligence.svg" alt="" width="600" height="380" loading="lazy"></div><div class="card-body"><span class="eyebrow">2026 &mdash;</span><h3>LendX Financial Technologies</h3><p>Co-founded to take the underwriting and diligence work that runs on spreadsheets today and turn it into a product.</p></div></div>
+      <div class="card"><div class="imgwrap"><img src="/art-legal.svg" alt="" width="600" height="380" loading="lazy"></div><div class="card-body"><span class="eyebrow">2023 &mdash;</span><h3>NEO Legal Services</h3><p>Professional corporation through which the Ontario paralegal practice runs.</p></div></div>
     </div>
   </div>
 </section>
 
-<section class="dark grain pad">
+<section class="ink-panel pad">
   <div class="wrap">
     <div class="rule-head"><h2 class="h-md">Selected positions</h2><span class="eyebrow">2017 &rarr; today</span></div>
-    <div class="ledger">
+    <div class="ledger stagger">
       <div class="ledger-row rise"><span class="k">2023 &mdash;</span><span class="v">NEO Legal Services</span><span class="n">In-house counsel</span></div>
       <div class="ledger-row rise"><span class="k">2026 &mdash;</span><span class="v">LendX Financial Technologies</span><span class="n">Co-founder</span></div>
       <div class="ledger-row rise"><span class="k">2017 &mdash;</span><span class="v">Sound Marketing Canada</span><span class="n">Founder &amp; project development manager</span></div>
@@ -544,7 +550,7 @@ PAGES["work"] = dict(
 <section class="pad">
   <div class="wrap narrow">
     <div class="rule-head"><h2 class="h-md">Registrations</h2><span class="eyebrow eyebrow-mute">Sound Marketing Canada Inc.</span></div>
-    <div class="ledger">
+    <div class="ledger stagger">
       <div class="ledger-row rise two-col"><span class="k">CAGE</span><span class="v">L0S95</span></div>
       <div class="ledger-row rise two-col"><span class="k">UEI</span><span class="v">P297PSMMSUG7</span></div>
       <div class="ledger-row rise two-col"><span class="k">NAICS</span><span class="v">Coverage across 21 sectors</span></div>
@@ -561,12 +567,13 @@ PAGES["about"] = dict(
     title="About — Mohammed A. R. Farooqui",
     description="Licensed Ontario paralegal and financial analyst. Honours B.Com from Telfer, paralegal at triOS College, urban land economics at UBC Sauder, and postgraduate AI at Durham College.",
     active="/about",
-    body=f"""<section class="dark grain hero">
-  <div class="wrap inner">
+    body=f"""<section class="ink-panel hero">
+  <span class="orb orb-1"></span><span class="orb orb-2"></span>
+    <div class="wrap inner">
     <span class="eyebrow rise" style="--i:0">About</span>
-    <h1 class="h-lg rise" style="--i:1">Finance, law,<br>and the space <span class="italic brass">between them</span></h1>
+    <h1 class="h-lg rise" style="--i:1">Finance, law,<br>and the space <span class="italic amber">between them</span></h1>
     <div class="portrait-block rise" style="--i:2;max-width:30rem">
-      <img src="/assets/portrait.png" alt="Mohammed A. R. Farooqui" width="184" height="184">
+      <img src="/portrait.png" alt="Mohammed A. R. Farooqui" width="184" height="184">
       <span><span class="sig">Mohammed A. R. Farooqui</span><span class="cap">Pickering, Ontario</span></span>
     </div>
   </div>
@@ -585,17 +592,17 @@ PAGES["about"] = dict(
   </div>
 </section>
 
-<section class="dark grain pad">
+<section class="ink-panel pad">
   <div class="wrap">
     <div class="rule-head"><h2 class="h-md">Education</h2><span class="eyebrow">Qualifications</span></div>
-    <div class="ledger">
+    <div class="ledger stagger">
       <div class="ledger-row rise"><span class="k">2020</span><span class="v">Honours Bachelor of Commerce</span><span class="n">International Management &middot; Telfer School of Management, University of Ottawa</span></div>
       <div class="ledger-row rise"><span class="k">2025</span><span class="v">Paralegal, Law</span><span class="n">triOS College Business Technology Healthcare</span></div>
       <div class="ledger-row rise"><span class="k">2023</span><span class="v">Urban Land Economics</span><span class="n">Diploma Program &middot; UBC Sauder School of Business, Real Estate Division</span></div>
       <div class="ledger-row rise"><span class="k">2027</span><span class="v">Artificial Intelligence, Analysis &amp; Design</span><span class="n">Postgraduate &middot; Durham College &middot; in progress</span></div>
     </div>
     <div class="rule-head mt-3"><h2 class="h-md">Licensing &amp; certification</h2><span class="eyebrow">Current</span></div>
-    <div class="ledger">
+    <div class="ledger stagger">
       <div class="ledger-row rise"><span class="k">LSO</span><span class="v">Licensed paralegal</span><span class="n">Law Society of Ontario</span></div>
       <div class="ledger-row rise"><span class="k">CSI</span><span class="v">Canadian Securities Course &amp; IFC</span><span class="n">Canadian Securities Institute</span></div>
       <div class="ledger-row rise"><span class="k">LLQP</span><span class="v">Life Licence Qualification Program</span><span class="n">Harmonized</span></div>
@@ -607,7 +614,7 @@ PAGES["about"] = dict(
 <section class="pad">
   <div class="wrap">
     <div class="rule-head"><h2 class="h-md">How I work</h2><span class="eyebrow eyebrow-mute">What to expect</span></div>
-    <ul class="checks">
+    <ul class="checks stagger">
       <li>You get the downside first, then the upside</li>
       <li>Fixed quote before work starts, not after</li>
       <li>If I am the wrong person for it, I say so on the first call</li>
@@ -627,15 +634,16 @@ PAGES["contact"] = dict(
     title="Contact — Mohammed A. R. Farooqui",
     description="Book a scoping call for Quality of Earnings, underwriting, paralegal matters, or marketing. Pickering and Toronto, Ontario. Replies within one business day.",
     active="/contact",
-    body="""<section class="dark grain hero">
-  <div class="wrap inner">
+    body="""<section class="ink-panel hero">
+  <span class="orb orb-1"></span><span class="orb orb-2"></span>
+    <div class="wrap inner">
     <span class="eyebrow rise" style="--i:0">Contact</span>
-    <h1 class="h-lg rise" style="--i:1">Start a <span class="italic brass">file</span></h1>
+    <h1 class="h-lg rise" style="--i:1">Start a <span class="italic amber">file</span></h1>
     <p class="lead rise" style="--i:2">Tell me what the matter is and what is at stake. The more specific you are, the more useful the first call will be. I reply within one business day.</p>
   </div>
 </section>
 
-<section class="dark pad" style="background:var(--ink-2)">
+<section class="ink-panel pad" >
   <div class="wrap">
     <div class="split">
       <form class="form rise" id="contact-form" novalidate>
@@ -653,7 +661,7 @@ PAGES["contact"] = dict(
         </div>
         <div class="field"><label for="message">Details</label><textarea id="message" name="message" required></textarea></div>
         <input class="hp" type="text" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <div><button class="btn btn-brass" type="submit">Send message</button></div>
+        <div><button class="btn btn-fill" type="submit">Send message</button></div>
         <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
       </form>
 
@@ -676,12 +684,12 @@ PAGES["404"] = dict(
     title="Page not found — Mohammed A. R. Farooqui",
     description="That page does not exist.",
     active="",
-    body="""<section class="dark grain" style="min-height:70vh;display:grid;align-content:center">
+    body="""<section class="ink-panel" style="min-height:70vh;display:grid;align-content:center">
   <div class="wrap void">
     <span class="eyebrow">Error 404</span>
-    <h1 class="h-lg">This page is not<br>in the <span class="italic brass">file</span>.</h1>
+    <h1 class="h-lg">This page is not<br>in the <span class="italic amber">file</span>.</h1>
     <p class="lead" style="margin-inline:auto;max-width:44ch">The address is wrong or the page has moved.</p>
-    <div class="actions" style="justify-content:center"><a class="btn btn-brass" href="/">Back to the site</a><a class="btn btn-line" href="/contact">Contact</a></div>
+    <div class="actions" style="justify-content:center"><a class="btn btn-fill" href="/"><span>Back to the site</span></a><a class="btn btn-line" href="/contact"><span>Contact</span></a></div>
   </div>
 </section>""",
 )
@@ -730,11 +738,11 @@ def main():
         "start_url": "/",
         "scope": "/",
         "display": "standalone",
-        "background_color": "#0B1110",
-        "theme_color": "#0B1110",
+        "background_color": "#FBF9F4",
+        "theme_color": "#FBF9F4",
         "icons": [
-            {"src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
-            {"src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
+            {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+            {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
         ],
     }
     (out / "site.webmanifest").write_text(_json.dumps(manifest, indent=2), encoding="utf-8")

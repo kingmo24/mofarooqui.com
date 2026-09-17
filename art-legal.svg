@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" role="img" aria-label="A filed record with an official seal">
+<rect width="600" height="380" fill="#FBF9F4"/>
+<rect x="108" y="38" width="304" height="304" rx="4" fill="#fff" stroke="#EDE8DC" stroke-width="2"/>
+<rect x="108" y="38" width="304" height="304" rx="4" fill="none" stroke="#1A1A17" stroke-width="1" opacity=".12"/>
+<g stroke="#EDE8DC" stroke-width="2"><path d="M140 96h240M140 128h240M140 160h240M140 192h200M140 224h240M140 256h160"/></g>
+<rect x="140" y="64" width="120" height="12" rx="2" fill="#5E7355" opacity=".55"/>
+<circle cx="420" cy="270" r="60" fill="#C6603D" opacity=".08"/>
+<circle cx="420" cy="270" r="58" fill="none" stroke="#C6603D" stroke-width="2.5"/>
+<circle cx="420" cy="270" r="47" fill="none" stroke="#C6603D" stroke-width="1" opacity=".6"/>
+<text x="420" y="266" font-family="ui-monospace,monospace" font-size="13" fill="#C6603D" text-anchor="middle" font-weight="600">FILED</text>
+<text x="420" y="285" font-family="ui-monospace,monospace" font-size="9" fill="#C6603D" text-anchor="middle">ONTARIO</text>
+</svg>
