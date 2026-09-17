@@ -1,42 +1,39 @@
-# mofarooqui.com
+# mofarooqui.com — Daylight
 
-Static, seven pages, no build step needed to deploy. SEO and icons are complete.
+Static, seven pages, flat file structure (every asset at the root — no /assets/
+folder to lose on upload). Warm "daylight" theme with modern motion.
 
-## Deploy (easiest — no GitHub)
-Unzip, then vercel.com → Add New → Project → drag the folder onto the deploy area.
-Live in ~20s. Dragging uploads binary images correctly (paste corrupts PNGs).
-
-## Deploy (GitHub)
-Push the folder, import at vercel.com, framework preset "Other", build/output empty.
-Upload — never paste — the .png/.ico files.
+## Deploy (easiest)
+Unzip → vercel.com → Add New → Project → drag the folder onto the deploy area.
+Live in ~20s. Dragging uploads images correctly (paste corrupts PNGs).
 
 ## Domain
-Vercel → Settings → Domains → add mofarooqui.com.
+Vercel → Settings → Domains → add BOTH mofarooqui.com and www.mofarooqui.com.
 Registrar: A @ → 76.76.21.21 ; CNAME www → cname.vercel-dns.com
 
 ## Contact form
-Vercel → Settings → Environment Variables:
-  RESEND_API_KEY = (from resend.com)
-  CONTACT_TO     = marfarooqui@gmail.com
-Redeploy. Without them the form shows an "email me directly" fallback.
+Vercel → Settings → Environment Variables → RESEND_API_KEY + CONTACT_TO, redeploy.
 
-## SEO included
-- Unique title + meta description + keywords per page
-- Open Graph + Twitter card (1200x630 image) per page
-- Canonical URL per page; en-CA locale
-- JSON-LD graph: WebSite + Person + WebPage + BreadcrumbList on every page;
-  Service (diligence), LegalService (legal), and FAQPage where FAQs are shown
-- sitemap.xml (lastmod/priority) + robots.txt + site.webmanifest
-- 404 set to noindex
-Submit the sitemap in Google Search Console after launch: https://mofarooqui.com/sitemap.xml
+## The daylight theme
+All colours are tokens at the top of styles.css:
+  --paper  #FBF9F4  warm background
+  --ink    #1A1A17  text + hero/footer panels
+  --amber  #C6603D  primary accent
+  --sage   #5E7355  secondary
+  --gold   #C89B3C  tertiary
+Fonts: Fraunces (display), Karla (body), IBM Plex Mono (labels).
+Change a token → whole site follows.
 
-## Favicons included
-favicon.ico (16/32/48), favicon.svg, 16 + 32 PNG, apple-touch-icon (180),
-maskable 192 + 512 for Android/PWA, safari-pinned-tab.svg.
+## Animations (all GPU-friendly, all respect prefers-reduced-motion)
+- Hero headline reveals line by line on load
+- Scroll progress bar (sage→gold→amber) at the very top
+- Sections + cards fade/stagger in on scroll (IntersectionObserver)
+- Magnetic buttons + fill-sweep on hover (pointer devices only)
+- Cards: lift, image zoom, and a pointer-tracked warm glow
+- Nav gains a shadow once you scroll; animated underline on links
+- Drifting gradient orbs in the hero
+Anyone with "reduce motion" set in their OS sees a calm static version.
 
 ## Editing
-Edit the .html directly for copy. For shared header/footer/head changes edit
-build.py and run `python3 build.py` (regenerates pages + sitemap + manifest).
-
-## To opt out of AI crawlers
-Uncomment the GPTBot / CCBot blocks in robots.txt.
+Edit .html directly for copy. For shared header/footer/head, edit build.py and
+run `python3 build.py`.
