@@ -1,0 +1,7 @@
+{
+  "name": "mofarooqui-com",
+  "version": "4.0.0",
+  "private": true,
+  "scripts": { "dev": "npx serve .", "deploy": "vercel --prod" },
+  "dependencies": { "resend": "^4.0.0" }
+}
