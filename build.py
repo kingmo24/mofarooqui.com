@@ -11,7 +11,19 @@ fine for copy changes. Use this script instead when you change something shared
 
 import pathlib
 
+import json as _json
+def _j(s):
+    return _json.dumps(s.replace("&amp;", "&").replace("&mdash;", "\u2014").replace("&ndash;", "\u2013"))
+
 SITE = "https://mofarooqui.com"
+_CRUMBS = {
+    "diligence": "Quality of Earnings & Underwriting",
+    "legal": "Paralegal Services",
+    "marketing": "Marketing & Growth",
+    "work": "Work & Record",
+    "about": "About",
+    "contact": "Contact",
+}
 NAV = [
     ("Diligence", "/diligence"),
     ("Legal", "/legal"),
@@ -81,30 +93,78 @@ FOOTER = """<footer class="foot">
 </footer>"""
 
 
-def shell(*, path, title, description, body, active, schema=""):
+def shell(*, path, title, description, body, active, schema="", keywords="", og_alt=""):
     canonical = SITE + ("/" if path == "index" else f"/{path}")
-    schema_block = f'<script type="application/ld+json">{schema}</script>' if schema else ""
+    is_home = path == "index"
+    kw = keywords or "Quality of Earnings, EBITDA analysis, financial due diligence, mortgage underwriting, credit underwriting, paralegal Ontario, Small Claims Court, Landlord and Tenant Board, Toronto, Pickering, Mohammed Farooqui"
+    og_image_alt = og_alt or "Mohammed A. R. Farooqui — Quality of Earnings, underwriting and paralegal services"
+
+    # per-page graph: WebPage + optional service/legal schema, all tied to one Person + WebSite
+    graph = [
+        '{"@type":"WebSite","@id":"%s/#website","url":"%s/","name":"Mohammed A. R. Farooqui","publisher":{"@id":"%s/#person"},"inLanguage":"en-CA"}' % (SITE, SITE, SITE),
+        '{"@type":"Person","@id":"%s/#person","name":"Mohammed A. R. Farooqui","url":"%s/","image":{"@type":"ImageObject","url":"%s/assets/portrait-card.png"},"jobTitle":"Licensed Paralegal & Financial Analyst","email":"marfarooqui@gmail.com","telephone":"+1-647-200-3526","address":{"@type":"PostalAddress","addressLocality":"Pickering","addressRegion":"ON","postalCode":"L1V 1C8","addressCountry":"CA"},"sameAs":["https://www.linkedin.com/in/kingmo24"],"worksFor":{"@type":"Organization","name":"Sound Marketing Canada Inc."},"knowsAbout":["Quality of Earnings","EBITDA analysis","Mortgage underwriting","Credit underwriting","Paralegal services","Digital marketing"],"alumniOf":["University of Ottawa","triOS College","UBC Sauder School of Business"]}' % (SITE, SITE, SITE),
+        '{"@type":"WebPage","@id":"%s#webpage","url":"%s","name":%s,"description":%s,"isPartOf":{"@id":"%s/#website"},"about":{"@id":"%s/#person"},"inLanguage":"en-CA"}' % (canonical, canonical, _j(title), _j(description), SITE, SITE),
+    ]
+    # breadcrumbs (skip on home)
+    if not is_home:
+        crumb_name = _CRUMBS.get(path, path.title())
+        graph.append('{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"%s/"},{"@type":"ListItem","position":2,"name":%s,"item":"%s"}]}' % (SITE, _j(crumb_name), canonical))
+    if schema:
+        graph.append(schema)
+
+    schema_block = '<script type="application/ld+json">{"@context":"https://schema.org","@graph":[' + ",".join(graph) + ']}</script>'
+
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en-CA">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content="{description}">
+<meta name="keywords" content="{kw}">
+<meta name="author" content="Mohammed A. R. Farooqui">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="theme-color" content="#0B1110">
+<meta name="format-detection" content="telephone=no">
 <link rel="canonical" href="{canonical}">
-<meta property="og:type" content="website">
+
+<!-- Open Graph -->
+<meta property="og:type" content="{'website' if is_home else 'article'}">
+<meta property="og:site_name" content="Mohammed A. R. Farooqui">
+<meta property="og:locale" content="en_CA">
 <meta property="og:url" content="{canonical}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{description}">
 <meta property="og:image" content="{SITE}/assets/og.png">
+<meta property="og:image:secure_url" content="{SITE}/assets/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{og_image_alt}">
+
+<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#0B1110">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{description}">
+<meta name="twitter:image" content="{SITE}/assets/og.png">
+<meta name="twitter:image:alt" content="{og_image_alt}">
+
+<!-- Icons -->
+<link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#0B1110">
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="{FONTS}">
 <link href="{FONTS}" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
+<link rel="sitemap" type="application/xml" href="/sitemap.xml">
 {schema_block}
 </head>
 <body>
@@ -153,10 +213,12 @@ STEPS = """<ol class="steps">
 PAGES = {}
 
 PAGES["index"] = dict(
+    keywords="Quality of Earnings Toronto, EBITDA analysis Ontario, financial due diligence, mortgage underwriting, paralegal Pickering, business valuation, M&A diligence, Mohammed Farooqui",
+    og_alt="Mohammed A. R. Farooqui — Quality of Earnings, underwriting and paralegal services in Ontario",
     title="Mohammed A. R. Farooqui — Quality of Earnings, Underwriting &amp; Paralegal Services | Ontario",
     description="Quality of Earnings and EBITDA analysis, mortgage and credit underwriting, licensed paralegal representation, and growth marketing. Pickering and Toronto, Ontario.",
     active="/",
-    schema="""{"@context":"https://schema.org","@type":"Person","name":"Mohammed A. R. Farooqui","url":"https://mofarooqui.com/","image":"https://mofarooqui.com/assets/portrait-card.png","jobTitle":"Licensed Paralegal & Financial Analyst","email":"mailto:marfarooqui@gmail.com","telephone":"+1-647-200-3526","address":{"@type":"PostalAddress","addressLocality":"Pickering","addressRegion":"ON","addressCountry":"CA"},"sameAs":["https://www.linkedin.com/in/kingmo24"],"worksFor":{"@type":"Organization","name":"Sound Marketing Canada Inc."},"knowsAbout":["Quality of Earnings","EBITDA analysis","Mortgage underwriting","Paralegal services","Digital marketing"]}""",
+    schema="",
     body=f"""<section class="dark grain hero">
   <div class="wrap inner">
     <span class="eyebrow rise" style="--i:0">Pickering &middot; Toronto &middot; Ontario</span>
@@ -234,10 +296,12 @@ PAGES["index"] = dict(
 )
 
 PAGES["diligence"] = dict(
+    keywords="Quality of Earnings report, QoE analysis, EBITDA normalization, add-back review, financial due diligence Toronto, working capital analysis, buy-side diligence, sell-side QoE, credit underwriting Ontario",
+    og_alt="Quality of Earnings and underwriting services",
     title="Quality of Earnings &amp; Underwriting — Mohammed A. R. Farooqui",
     description="Quality of Earnings reports, EBITDA normalization, and mortgage and credit underwriting for buyers, lenders, and owners in Ontario and remote.",
     active="/diligence",
-    schema="""{"@context":"https://schema.org","@type":"Service","serviceType":"Quality of Earnings and financial due diligence","provider":{"@type":"Person","name":"Mohammed A. R. Farooqui"},"areaServed":"CA","url":"https://mofarooqui.com/diligence"}""",
+    schema="""{"@type":"Service","serviceType":"Quality of Earnings and financial due diligence","provider":{"@type":"Person","name":"Mohammed A. R. Farooqui"},"areaServed":"CA","url":"https://mofarooqui.com/diligence"},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How long does a Quality of Earnings engagement take?","acceptedAnswer":{"@type":"Answer","text":"Two to four weeks from the day the document request is filled. The clock is usually set by how fast the target produces records, not by the analysis itself."}},{"@type":"Question","name":"Can you work from incomplete books?","acceptedAnswer":{"@type":"Answer","text":"Often yes. Reconstructed statements are common in owner-operated businesses. It takes longer and costs more, and you will be told at the scoping call whether the records can support a defensible number."}},{"@type":"Question","name":"Do you work sell-side?","acceptedAnswer":{"@type":"Answer","text":"Yes. A sell-side Quality of Earnings run before going to market finds the adjustments a buyer would have used against you, which is generally cheaper than finding them during the buyer's diligence."}},{"@type":"Question","name":"Do you work outside Ontario?","acceptedAnswer":{"@type":"Answer","text":"Financial analysis, underwriting, and consulting are handled remotely anywhere in Canada and the United States. Paralegal representation is limited to Ontario."}}]}""",
     body=f"""<section class="dark grain hero">
   <div class="wrap inner">
     <span class="eyebrow rise" style="--i:0">Practice 01</span>
@@ -314,10 +378,12 @@ PAGES["diligence"] = dict(
 )
 
 PAGES["legal"] = dict(
+    keywords="paralegal Ontario, Small Claims Court paralegal, Landlord and Tenant Board, provincial offences, debt recovery, contract dispute, licensed paralegal Pickering Toronto",
+    og_alt="Licensed Ontario paralegal representation",
     title="Paralegal Services in Ontario — Mohammed A. R. Farooqui",
     description="Licensed Ontario paralegal. Small Claims Court, provincial offences, Landlord and Tenant Board, and administrative tribunals. Pickering and the Greater Toronto Area.",
     active="/legal",
-    schema="""{"@context":"https://schema.org","@type":"LegalService","name":"Mohammed A. R. Farooqui, Paralegal","areaServed":{"@type":"State","name":"Ontario"},"url":"https://mofarooqui.com/legal","telephone":"+1-647-200-3526"}""",
+    schema="""{"@type":"LegalService","name":"Mohammed A. R. Farooqui, Paralegal","areaServed":{"@type":"State","name":"Ontario"},"url":"https://mofarooqui.com/legal","telephone":"+1-647-200-3526"},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does paralegal representation cost?","acceptedAnswer":{"@type":"Answer","text":"Quoted per matter after intake, either as a flat fee for defined work or hourly where the scope cannot be fixed in advance. Terms are provided in writing before work starts."}},{"@type":"Question","name":"Is a paralegal different from a lawyer?","acceptedAnswer":{"@type":"Answer","text":"Yes. Paralegals are licensed and regulated by the Law Society of Ontario and can represent clients in Small Claims Court, provincial offences, and certain tribunals. For matters inside paralegal scope the cost is usually materially lower."}},{"@type":"Question","name":"Can you act for me if you did the financial analysis?","acceptedAnswer":{"@type":"Answer","text":"Sometimes, assessed file by file. The roles carry different duties and a conflict can arise. It is raised at intake rather than after a retainer is signed."}}]}""",
     body=f"""<section class="dark grain hero">
   <div class="wrap inner">
     <span class="eyebrow rise" style="--i:0">Practice 02</span>
@@ -380,6 +446,8 @@ PAGES["legal"] = dict(
 )
 
 PAGES["marketing"] = dict(
+    keywords="digital marketing Toronto, lead generation, SEO, government procurement registration, SAM CAGE UEI NAICS, Sound Marketing Canada",
+    og_alt="Marketing and growth services",
     title="Marketing &amp; Growth — Sound Marketing Canada | Mohammed A. R. Farooqui",
     description="Campaigns, lead generation, analytics, and online profile management for small businesses, real estate, and government procurement. Sound Marketing Canada Inc.",
     active="/marketing",
@@ -433,6 +501,8 @@ PAGES["marketing"] = dict(
 )
 
 PAGES["work"] = dict(
+    keywords="Mohammed Farooqui experience, Sound Marketing Canada, LendX Financial, NEO Legal Services, CIBC mortgage advisor, government procurement",
+    og_alt="Selected work and professional record",
     title="Work &amp; Record — Mohammed A. R. Farooqui",
     description="Selected positions, companies, projects, and registrations. Sound Marketing Canada, LendX Financial Technologies, NEO Legal Services, CIBC, and government procurement work.",
     active="/work",
@@ -486,6 +556,8 @@ PAGES["work"] = dict(
 )
 
 PAGES["about"] = dict(
+    keywords="Mohammed Farooqui about, licensed paralegal financial analyst, Telfer School of Management, triOS College paralegal, UBC Sauder real estate",
+    og_alt="About Mohammed A. R. Farooqui",
     title="About — Mohammed A. R. Farooqui",
     description="Licensed Ontario paralegal and financial analyst. Honours B.Com from Telfer, paralegal at triOS College, urban land economics at UBC Sauder, and postgraduate AI at Durham College.",
     active="/about",
@@ -550,6 +622,8 @@ PAGES["about"] = dict(
 )
 
 PAGES["contact"] = dict(
+    keywords="contact Mohammed Farooqui, book QoE consultation, paralegal consultation Ontario, financial analyst Toronto",
+    og_alt="Contact and book a consultation",
     title="Contact — Mohammed A. R. Farooqui",
     description="Book a scoping call for Quality of Earnings, underwriting, paralegal matters, or marketing. Pickering and Toronto, Ontario. Replies within one business day.",
     active="/contact",
@@ -623,20 +697,48 @@ def main():
             body=page["body"],
             active=page["active"],
             schema=page.get("schema", ""),
+            keywords=page.get("keywords", ""),
+            og_alt=page.get("og_alt", ""),
         )
         (out / f"{name}.html").write_text(html, encoding="utf-8")
         print(f"wrote {name}.html")
 
-    # sitemap
-    urls = "".join(
-        f"<url><loc>{SITE}/{'' if n == 'index' else n}</loc></url>"
-        for n in PAGES if n != "404"
-    )
+    # sitemap with lastmod / priority / changefreq
+    import datetime
+    today = datetime.date.today().isoformat()
+    prio = {"index": "1.0", "diligence": "0.9", "legal": "0.9", "marketing": "0.8",
+            "contact": "0.7", "work": "0.6", "about": "0.6"}
+    rows = []
+    for n in PAGES:
+        if n == "404":
+            continue
+        loc = f"{SITE}/" if n == "index" else f"{SITE}/{n}"
+        rows.append(
+            f"  <url><loc>{loc}</loc><lastmod>{today}</lastmod>"
+            f"<changefreq>monthly</changefreq><priority>{prio.get(n,'0.6')}</priority></url>")
     (out / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
-        f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n',
-        encoding="utf-8")
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + "\n".join(rows) + "\n</urlset>\n", encoding="utf-8")
     print("wrote sitemap.xml")
+
+    # web app manifest
+    manifest = {
+        "name": "Mohammed A. R. Farooqui",
+        "short_name": "M. A. R. Farooqui",
+        "description": "Quality of Earnings, underwriting, and paralegal services in Ontario.",
+        "start_url": "/",
+        "scope": "/",
+        "display": "standalone",
+        "background_color": "#0B1110",
+        "theme_color": "#0B1110",
+        "icons": [
+            {"src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+            {"src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
+        ],
+    }
+    (out / "site.webmanifest").write_text(_json.dumps(manifest, indent=2), encoding="utf-8")
+    print("wrote site.webmanifest")
 
 
 if __name__ == "__main__":

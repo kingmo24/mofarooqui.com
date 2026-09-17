@@ -1,92 +1,42 @@
-# mofarooqui.com — v4
+# mofarooqui.com
 
-Seven pages, static HTML, no build step required to deploy. Hosted on Vercel.
+Static, seven pages, no build step needed to deploy. SEO and icons are complete.
 
-```
-index.html        home
-diligence.html    QoE, EBITDA, underwriting, consulting  → /diligence
-legal.html        paralegal practice                     → /legal
-marketing.html    Sound Marketing Canada                 → /marketing
-work.html         companies, positions, registrations    → /work
-about.html        story, education, licensing            → /about
-contact.html      form + direct lines                    → /contact
-404.html          not-found page
+## Deploy (easiest — no GitHub)
+Unzip, then vercel.com → Add New → Project → drag the folder onto the deploy area.
+Live in ~20s. Dragging uploads binary images correctly (paste corrupts PNGs).
 
-styles.css        all design tokens live in :root at the top
-main.js           reveals, nav state, contact form
-build.py          optional generator (see below)
-api/contact.js    serverless function that emails the form
-assets/           artwork, portrait, icons, social card
-```
+## Deploy (GitHub)
+Push the folder, import at vercel.com, framework preset "Other", build/output empty.
+Upload — never paste — the .png/.ico files.
 
-Clean URLs are on, so `diligence.html` is served at `/diligence`. Keep the links
-without the `.html` extension.
-
-## Editing
-
-For copy changes, **edit the `.html` files directly** — they are plain HTML and
-that is the simplest path.
-
-The header and footer are repeated in every page. If you change something shared
-(a nav link, the footer, the disclaimer), edit `build.py` and run:
-
-```bash
-python3 build.py
-```
-
-That regenerates all pages and the sitemap. If you have edited the HTML by hand
-since the last build, your changes will be overwritten — so pick one approach and
-stay with it. For most updates, editing the HTML is fine.
-
-## Design tokens
-
-Everything visual comes from the variables at the top of `styles.css`:
-
-| Token | Value | Used for |
-|---|---|---|
-| `--ink` | `#0B1110` | dark sections, footer |
-| `--bone` | `#EDEBE4` | light sections |
-| `--brass` | `#A97F45` | accents, prices, links |
-| `--display` | Cormorant Garamond | headings |
-| `--body` | Karla | body text |
-| `--mono` | IBM Plex Mono | labels, figures |
-
-Change a value there and the whole site follows.
-
-## Deploy
-
-```bash
-npm i -g vercel
-vercel --prod
-```
-
-Or push to GitHub and import the repo at vercel.com. Framework preset: **Other**.
-Build command and output directory: leave empty.
-
-Domain: Vercel → Settings → Domains → add `mofarooqui.com`. At your registrar,
-A record `@` → `76.76.21.21`, CNAME `www` → `cname.vercel-dns.com`.
+## Domain
+Vercel → Settings → Domains → add mofarooqui.com.
+Registrar: A @ → 76.76.21.21 ; CNAME www → cname.vercel-dns.com
 
 ## Contact form
+Vercel → Settings → Environment Variables:
+  RESEND_API_KEY = (from resend.com)
+  CONTACT_TO     = marfarooqui@gmail.com
+Redeploy. Without them the form shows an "email me directly" fallback.
 
-Set two environment variables in Vercel, then redeploy:
+## SEO included
+- Unique title + meta description + keywords per page
+- Open Graph + Twitter card (1200x630 image) per page
+- Canonical URL per page; en-CA locale
+- JSON-LD graph: WebSite + Person + WebPage + BreadcrumbList on every page;
+  Service (diligence), LegalService (legal), and FAQPage where FAQs are shown
+- sitemap.xml (lastmod/priority) + robots.txt + site.webmanifest
+- 404 set to noindex
+Submit the sitemap in Google Search Console after launch: https://mofarooqui.com/sitemap.xml
 
-- `RESEND_API_KEY` — from resend.com
-- `CONTACT_TO` — `marfarooqui@gmail.com`
+## Favicons included
+favicon.ico (16/32/48), favicon.svg, 16 + 32 PNG, apple-touch-icon (180),
+maskable 192 + 512 for Android/PWA, safari-pinned-tab.svg.
 
-Without them the form shows the "email me directly" fallback. Never commit the key.
+## Editing
+Edit the .html directly for copy. For shared header/footer/head changes edit
+build.py and run `python3 build.py` (regenerates pages + sitemap + manifest).
 
-## The headshot
-
-`assets/portrait.png` is your photo upscaled 2× from a 92px original, cut to a
-transparent circle. It is displayed at 84px, which is as large as it can go while
-staying sharp. Send a full-resolution photo and it can be used much bigger —
-including a proper portrait on the About page.
-
-Regenerate `assets/og.png` (the social preview) if the photo changes.
-
-## Local preview
-
-```bash
-npx serve .        # static only
-vercel dev         # includes the contact form function
-```
+## To opt out of AI crawlers
+Uncomment the GPTBot / CCBot blocks in robots.txt.
