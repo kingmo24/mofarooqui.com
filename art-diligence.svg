@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" role="img" aria-label="Reported earnings adjusted to a normalized figure">
+<defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B5FE3"/><stop offset="1" stop-color="#2B5FE3" stop-opacity=".7"/></linearGradient></defs>
+<rect width="600" height="380" fill="#EEF2F7"/>
+<g stroke="#D7DFEA" stroke-width="1.5"><path d="M0 60h600M0 120h600M0 180h600M0 240h600M0 300h600"/></g>
+<rect x="60" y="96" width="70" height="224" rx="3" fill="url(#g1)"/>
+<rect x="160" y="150" width="70" height="170" rx="3" fill="url(#g1)"/>
+<rect x="260" y="186" width="70" height="134" rx="3" fill="url(#g1)"/>
+<rect x="360" y="214" width="70" height="106" rx="3" fill="url(#g1)"/>
+<rect x="460" y="230" width="70" height="90" rx="3" fill="#F0653E"/>
+<path d="M60 96 L130 96 L160 150 L230 150 L260 186 L330 186 L360 214 L430 214 L460 230 L530 230" fill="none" stroke="#0E9AA6" stroke-width="2.5" stroke-dasharray="6 5" stroke-linecap="round"/>
+<circle cx="495" cy="230" r="5" fill="#F0653E"/>
+<path d="M40 320h530" stroke="#0E1A2B" stroke-width="1.5" opacity=".3"/>
+<g font-family="ui-monospace,monospace" font-size="11" fill="#0E1A2B" opacity=".55">
+<text x="95" y="344" text-anchor="middle">REPORTED</text><text x="195" y="344" text-anchor="middle">ADD-BACKS</text>
+<text x="295" y="344" text-anchor="middle">ONE-TIME</text><text x="395" y="344" text-anchor="middle">WORKING CAP</text></g>
+<text x="495" y="344" font-family="ui-monospace,monospace" font-size="11" fill="#F0653E" text-anchor="middle" font-weight="600">NORMALIZED</text>
+</svg>
